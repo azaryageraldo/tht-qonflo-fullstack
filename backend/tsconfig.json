@@ -17,6 +17,11 @@
     "moduleDetection": "force",
     "isolatedModules": true
   },
+  "ts-node": {
+    "compilerOptions": {
+      "module": "commonjs"
+    }
+  },
   "include": ["src/**/*"],
   "exclude": ["node_modules", "dist"]
 }

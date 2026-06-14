@@ -2,7 +2,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import type { Task, AuditLog } from './types.js';
 
-const DATA_PATH = path.resolve(__dirname, '../../data/store.json');
+const DATA_PATH = path.resolve(__dirname, '..', 'data', 'store.json');
 
 interface Store {
   tasks: Task[];

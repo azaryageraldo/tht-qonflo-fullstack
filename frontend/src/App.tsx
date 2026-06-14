@@ -1,122 +1,124 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
-import heroImg from './assets/hero.png'
-import './App.css'
+import { useState, useEffect } from 'react';
+import type { Task, TaskStatus } from './types';
+import { USERS } from './types';
+import { fetchTasks, createTask, updateTaskStatus, deleteTask } from './api';
+import TaskForm from './components/TaskForm';
+import TaskItem from './components/TaskItem';
+import AuditLogModal from './components/AuditLogModal';
+import './App.css';
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [tasks, setTasks] = useState<Task[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
+  const [selectedActor, setSelectedActor] = useState<string>(USERS[0]);
+  const [auditTaskId, setAuditTaskId] = useState<string | null>(null);
+
+  const loadTasks = async () => {
+    try {
+      setError('');
+      const data = await fetchTasks();
+      setTasks(data);
+    } catch {
+      setError('Failed to load tasks');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    loadTasks();
+  }, []);
+
+  const handleCreateTask = async (title: string) => {
+    try {
+      setError('');
+      await createTask(title);
+      await loadTasks();
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : 'Failed to create task');
+    }
+  };
+
+  const handleStatusChange = async (taskId: string, newStatus: TaskStatus, actor: string) => {
+    try {
+      setError('');
+      await updateTaskStatus(taskId, newStatus, actor);
+      await loadTasks();
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : 'Failed to update status');
+    }
+  };
+
+  const handleDelete = async (taskId: string) => {
+    try {
+      setError('');
+      await deleteTask(taskId);
+      await loadTasks();
+    } catch {
+      setError('Failed to delete task');
+    }
+  };
+
+  const auditTask = tasks.find((t) => t.id === auditTaskId);
 
   return (
-    <>
-      <section id="center">
-        <div className="hero">
-          <img src={heroImg} className="base" width="170" height="179" alt="" />
-          <img src={reactLogo} className="framework" alt="React logo" />
-          <img src={viteLogo} className="vite" alt="Vite logo" />
+    <div className="app">
+      <header className="app-header">
+        <h1>Mini Task Manager</h1>
+        <div className="actor-selector">
+          <label htmlFor="actor">Acting as:</label>
+          <select
+            id="actor"
+            value={selectedActor}
+            onChange={(e) => setSelectedActor(e.target.value)}
+          >
+            {USERS.map((user) => (
+              <option key={user} value={user}>
+                {user}
+              </option>
+            ))}
+          </select>
         </div>
-        <div>
-          <h1>Get started</h1>
-          <p>
-            Edit <code>src/App.tsx</code> and save to test <code>HMR</code>
-          </p>
-        </div>
-        <button
-          type="button"
-          className="counter"
-          onClick={() => setCount((count) => count + 1)}
-        >
-          Count is {count}
-        </button>
-      </section>
+      </header>
 
-      <div className="ticks"></div>
-
-      <section id="next-steps">
-        <div id="docs">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#documentation-icon"></use>
-          </svg>
-          <h2>Documentation</h2>
-          <p>Your questions, answered</p>
-          <ul>
-            <li>
-              <a href="https://vite.dev/" target="_blank">
-                <img className="logo" src={viteLogo} alt="" />
-                Explore Vite
-              </a>
-            </li>
-            <li>
-              <a href="https://react.dev/" target="_blank">
-                <img className="button-icon" src={reactLogo} alt="" />
-                Learn more
-              </a>
-            </li>
-          </ul>
+      {error && (
+        <div className="error-banner">
+          <span>{error}</span>
+          <button onClick={() => setError('')}>&times;</button>
         </div>
-        <div id="social">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#social-icon"></use>
-          </svg>
-          <h2>Connect with us</h2>
-          <p>Join the Vite community</p>
-          <ul>
-            <li>
-              <a href="https://github.com/vitejs/vite" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#github-icon"></use>
-                </svg>
-                GitHub
-              </a>
-            </li>
-            <li>
-              <a href="https://chat.vite.dev/" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#discord-icon"></use>
-                </svg>
-                Discord
-              </a>
-            </li>
-            <li>
-              <a href="https://x.com/vite_js" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#x-icon"></use>
-                </svg>
-                X.com
-              </a>
-            </li>
-            <li>
-              <a href="https://bsky.app/profile/vite.dev" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#bluesky-icon"></use>
-                </svg>
-                Bluesky
-              </a>
-            </li>
-          </ul>
-        </div>
-      </section>
+      )}
 
-      <div className="ticks"></div>
-      <section id="spacer"></section>
-    </>
-  )
+      <TaskForm onCreateTask={handleCreateTask} />
+
+      {loading ? (
+        <p className="loading">Loading tasks...</p>
+      ) : tasks.length === 0 ? (
+        <p className="empty-state">No tasks yet. Create your first task above!</p>
+      ) : (
+        <div className="task-list">
+          {tasks.map((task) => (
+            <TaskItem
+              key={task.id}
+              task={task}
+              selectedActor={selectedActor}
+              onStatusChange={handleStatusChange}
+              onDelete={handleDelete}
+              onViewLogs={(id) => setAuditTaskId(id)}
+            />
+          ))}
+        </div>
+      )}
+
+      {auditTaskId && auditTask && (
+        <AuditLogModal
+          taskId={auditTaskId}
+          taskTitle={auditTask.title}
+          onClose={() => setAuditTaskId(null)}
+        />
+      )}
+    </div>
+  );
 }
 
-export default App
+export default App;
