@@ -1,5 +1,8 @@
 export type TaskStatus = 'to_do' | 'pending' | 'in_progress' | 'done';
 
+// Status yang bisa muncul di audit log (termasuk 'deleted' untuk soft delete)
+export type AuditStatus = TaskStatus | 'deleted';
+
 export interface Task {
   id: string;
   title: string;
@@ -12,18 +15,19 @@ export interface AuditLog {
   id: string;
   taskId: string;
   actor: string;
-  previousStatus: TaskStatus;
-  newStatus: TaskStatus;
+  previousStatus: AuditStatus;
+  newStatus: AuditStatus;
   changedAt: string;
 }
 
 export const USERS = ['john.doe', 'jane.smith', 'admin'] as const;
 
-export const STATUS_LABELS: Record<TaskStatus, string> = {
+export const STATUS_LABELS: Record<AuditStatus, string> = {
   to_do: 'To Do',
   pending: 'Pending',
   in_progress: 'In Progress',
   done: 'Done',
+  deleted: 'Dihapus',
 };
 
 export const VALID_TRANSITIONS: Record<TaskStatus, TaskStatus | null> = {

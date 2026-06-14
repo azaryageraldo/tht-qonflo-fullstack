@@ -47,11 +47,6 @@ export function updateTaskStatus(req: Request, res: Response): void {
     return;
   }
 
-  if (task.isDeleted) {
-    res.status(400).json({ error: 'Tugas yang sudah dihapus tidak dapat diubah' });
-    return;
-  }
-
   if (!status || typeof status !== 'string') {
     res.status(400).json({ error: 'Status wajib diisi' });
     return;
@@ -92,6 +87,12 @@ export function updateTaskStatus(req: Request, res: Response): void {
 // DELETE /tasks/:id
 export function deleteTask(req: Request, res: Response): void {
   const id = req.params.id as string;
+  const { actor } = req.body;
+
+  if (!actor || typeof actor !== 'string' || actor.trim().length === 0) {
+    res.status(400).json({ error: 'Actor wajib diisi' });
+    return;
+  }
 
   const task = store.getTaskById(id);
   if (!task) {
@@ -104,7 +105,19 @@ export function deleteTask(req: Request, res: Response): void {
     return;
   }
 
+  const previousStatus = task.status;
   store.deleteTask(id);
+
+  // Buat audit log untuk soft delete
+  store.addAuditLog({
+    id: uuidv4(),
+    taskId: id,
+    actor: actor.trim(),
+    previousStatus,
+    newStatus: 'deleted',
+    changedAt: new Date().toISOString(),
+  });
+
   res.status(204).send();
 }
 

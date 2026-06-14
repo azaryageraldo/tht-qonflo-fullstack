@@ -5,7 +5,7 @@ interface TaskItemProps {
   task: Task;
   selectedActor: string;
   onStatusChange: (taskId: string, newStatus: TaskStatus, actor: string) => void;
-  onDelete: (taskId: string) => void;
+  onDelete: (taskId: string, actor: string) => void;
   onViewLogs: (taskId: string) => void;
 }
 
@@ -78,7 +78,7 @@ export default function TaskItem({
           Log Aktivitas
         </button>
 
-        <button className="btn btn-danger" onClick={() => onDelete(task.id)}>
+        <button className="btn btn-danger" onClick={() => onDelete(task.id, selectedActor)}>
           Hapus
         </button>
       </div>

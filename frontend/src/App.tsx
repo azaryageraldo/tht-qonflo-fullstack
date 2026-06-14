@@ -50,10 +50,10 @@ function App() {
     }
   };
 
-  const handleDelete = async (taskId: string) => {
+  const handleDelete = async (taskId: string, actor: string) => {
     try {
       setError('');
-      await deleteTask(taskId);
+      await deleteTask(taskId, actor);
       await loadTasks();
     } catch {
       setError('Gagal menghapus tugas');

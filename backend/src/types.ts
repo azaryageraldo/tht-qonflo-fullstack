@@ -1,5 +1,8 @@
 export type TaskStatus = 'to_do' | 'pending' | 'in_progress' | 'done';
 
+// Status yang bisa muncul di audit log (termasuk 'deleted' untuk soft delete)
+export type AuditStatus = TaskStatus | 'deleted';
+
 export interface Task {
   id: string;
   title: string;
@@ -12,8 +15,8 @@ export interface AuditLog {
   id: string;
   taskId: string;
   actor: string;
-  previousStatus: TaskStatus;
-  newStatus: TaskStatus;
+  previousStatus: AuditStatus;
+  newStatus: AuditStatus;
   changedAt: string;
 }
 
