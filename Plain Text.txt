@@ -1,0 +1,256 @@
+TAKE-HOME TASK – FULL STACK DEVELOPER (REACT + EXPRESS)
+
+Tujuan
+Take-home task ini dirancang untuk mengevaluasi:
+
+* Cara berpikir dan pengambilan keputusan teknis.
+* Kemampuan membangun fitur end-to-end (Frontend + Backend).
+* Kualitas struktur kode dan konsistensi.
+* Kemampuan menjelaskan trade-off dan asumsi.
+
+Catatan:
+
+* Penggunaan AI diperbolehkan.
+* Kandidat harus memahami dan mampu menjelaskan seluruh solusi yang dibuat.
+* Estimasi waktu pengerjaan: 3–5 jam.
+
+---
+
+PRODUCT CONTEXT
+
+Aplikasi ini digunakan oleh tim internal untuk mengelola task sederhana.
+
+Masalah utama:
+
+* Status task sering berubah tetapi tidak jelas siapa yang mengubah.
+* Perubahan data sulit ditelusuri.
+* UI belum menjelaskan riwayat perubahan dengan baik.
+
+Solusi yang diminta adalah aplikasi sederhana namun mampu menunjukkan data dan riwayat perubahan secara jelas.
+
+---
+
+PROBLEM STATEMENT
+
+Buat aplikasi Mini Task Manager yang memungkinkan user:
+
+* Membuat task.
+* Mengubah status task.
+* Melihat riwayat perubahan (audit log) per task.
+
+Teknologi yang wajib digunakan:
+
+Frontend:
+
+* React
+* TypeScript
+
+Backend:
+
+* Node.js
+* Express
+* TypeScript
+
+---
+
+PENILAIAN
+
+Aspek yang dinilai:
+
+* Kejelasan struktur kode.
+* Konsistensi frontend dan backend.
+* Reasoning dan trade-off yang diambil.
+* Kemampuan menjelaskan solusi.
+
+Tidak dinilai berdasarkan jumlah fitur.
+
+Catatan:
+
+* Tidak ada satu solusi yang paling benar.
+* Solusi sederhana tetapi konsisten lebih baik daripada solusi kompleks yang sulit dipahami.
+* Pemikiran yang matang lebih dihargai daripada kode yang sempurna.
+
+---
+
+REQUIREMENTS
+
+1. TASK MANAGEMENT
+
+Struktur minimum Task:
+
+* id
+* title
+* status
+
+Fitur wajib:
+
+* Create Task
+* Update Task Status
+* Delete Task
+* List All Tasks
+
+Alur status yang diperbolehkan:
+
+to_do → pending → in_progress → done
+
+Perubahan status yang tidak mengikuti urutan harus ditolak oleh sistem.
+
+---
+
+2. AUDIT LOG
+
+Setiap perubahan status harus membuat audit log baru.
+
+Audit log harus dapat menjawab:
+
+* Task mana yang berubah.
+* Siapa yang melakukan perubahan (actor).
+* Status sebelumnya.
+* Status sesudahnya.
+* Waktu perubahan.
+
+Contoh:
+
+User "john.doe" changed Task "Prepare Invoice" status from "pending" to "in_progress" at 2025-01-01 10:00
+
+Ketentuan:
+
+* Audit log tidak boleh diubah.
+* Audit log tidak boleh dihapus.
+* Update task tidak boleh menghapus audit log lama.
+* Audit log harus ditampilkan secara kronologis.
+
+---
+
+3. API GUIDELINES
+
+Contoh endpoint:
+
+GET /tasks
+
+POST /tasks
+
+PUT /tasks/:id/status
+
+GET /tasks/:id/audit-logs
+
+Kandidat bebas mendesain API selama memenuhi kebutuhan sistem.
+
+---
+
+4. FRONTEND GUIDELINES
+
+UI sederhana tetapi jelas.
+
+Harus memenuhi:
+
+* Task list mudah dibaca.
+* Status task terlihat jelas.
+* Audit log dapat dilihat per task.
+
+Audit log dapat ditampilkan melalui:
+
+* Modal
+* Expandable Section
+* Halaman terpisah
+
+Tampilan visual tidak menjadi fokus penilaian.
+
+---
+
+5. NON-FUNCTIONAL REQUIREMENTS
+
+A. Idempotent Update
+
+Update status ke nilai yang sama tidak boleh membuat audit log baru.
+
+Contoh:
+
+Status saat ini:
+pending
+
+Request:
+pending
+
+Hasil:
+Tidak ada perubahan.
+Tidak membuat audit log baru.
+
+---
+
+B. Data Consistency
+
+Status task dan audit log harus selalu sinkron.
+
+Setiap perubahan status yang berhasil harus memiliki audit log yang sesuai.
+
+---
+
+C. Persistence
+
+Data dapat disimpan menggunakan:
+
+* In-memory storage
+* JSON file
+* Database
+
+Pilihan teknologi bebas.
+
+---
+
+D. Domain Validation
+
+Sistem harus menolak perubahan status yang melanggar alur bisnis.
+
+Contoh:
+
+to_do → done ❌
+
+pending → done ❌
+
+pending → in_progress ✅
+
+Validasi wajib dilakukan di backend.
+
+Validasi frontend bersifat opsional.
+
+---
+
+E. No Overengineering
+
+Tidak perlu:
+
+* Authentication
+* Authorization
+* Role Management
+* UI kompleks
+* Microservices
+
+Fokus pada solusi yang sederhana dan konsisten.
+
+---
+
+DELIVERABLES
+
+Upload ke Public GitHub Repository.
+
+README.md wajib berisi:
+
+1. Cara menjalankan frontend dan backend.
+2. Penjelasan singkat arsitektur.
+3. Asumsi yang digunakan.
+4. Trade-off yang diambil.
+5. Perbaikan yang akan dilakukan jika memiliki waktu tambahan.
+
+---
+
+PERTANYAAN WAJIB DIJAWAB
+
+1. Bagaimana kamu memastikan audit log tidak dapat dimodifikasi?
+
+2. Bagian mana dari solusi ini yang paling berisiko jika digunakan oleh banyak user?
+
+3. Jika sistem berkembang menjadi lebih besar, bagian mana yang akan direfactor terlebih dahulu dan mengapa?
+
+4. Jika menggunakan AI, bagian mana yang dibantu AI dan bagaimana cara memvalidasi hasilnya?
+
