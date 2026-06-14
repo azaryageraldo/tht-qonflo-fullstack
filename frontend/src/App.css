@@ -245,6 +245,26 @@
   transform: translateY(-1px);
 }
 
+.task-deleted {
+  opacity: 0.55;
+  background: var(--bg);
+}
+
+.task-deleted:hover {
+  transform: none;
+  box-shadow: var(--shadow-sm);
+}
+
+.task-deleted .task-title {
+  text-decoration: line-through;
+  color: var(--text-muted);
+}
+
+.status-badge-deleted {
+  background: var(--danger-bg) !important;
+  color: var(--danger) !important;
+}
+
 .task-header {
   display: flex;
   justify-content: space-between;

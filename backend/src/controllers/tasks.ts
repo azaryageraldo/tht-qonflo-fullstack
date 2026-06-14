@@ -24,6 +24,7 @@ export function createTask(req: Request, res: Response): void {
     title: title.trim(),
     status: 'to_do' as TaskStatus,
     createdAt: new Date().toISOString(),
+    isDeleted: false,
   };
 
   store.addTask(task);
@@ -43,6 +44,11 @@ export function updateTaskStatus(req: Request, res: Response): void {
   const task = store.getTaskById(id);
   if (!task) {
     res.status(404).json({ error: 'Tugas tidak ditemukan' });
+    return;
+  }
+
+  if (task.isDeleted) {
+    res.status(400).json({ error: 'Tugas yang sudah dihapus tidak dapat diubah' });
     return;
   }
 
@@ -90,6 +96,11 @@ export function deleteTask(req: Request, res: Response): void {
   const task = store.getTaskById(id);
   if (!task) {
     res.status(404).json({ error: 'Tugas tidak ditemukan' });
+    return;
+  }
+
+  if (task.isDeleted) {
+    res.status(400).json({ error: 'Tugas sudah dihapus sebelumnya' });
     return;
   }
 

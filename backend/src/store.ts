@@ -43,8 +43,11 @@ export function updateTaskStatus(id: string, newStatus: Task['status']): void {
 
 export function deleteTask(id: string): void {
   const store = readStore();
-  store.tasks = store.tasks.filter((t) => t.id !== id);
-  writeStore(store);
+  const task = store.tasks.find((t) => t.id === id);
+  if (task) {
+    task.isDeleted = true;
+    writeStore(store);
+  }
 }
 
 export function getAuditLogsByTaskId(taskId: string): AuditLog[] {

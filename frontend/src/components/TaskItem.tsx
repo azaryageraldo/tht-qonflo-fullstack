@@ -27,6 +27,27 @@ export default function TaskItem({
 
   const style = statusStyles[task.status];
 
+  if (task.isDeleted) {
+    return (
+      <div className="task-item task-deleted">
+        <div className="task-header">
+          <h3 className="task-title">{task.title}</h3>
+          <span className="status-badge status-badge-deleted">Dihapus</span>
+        </div>
+
+        <div className="task-meta">
+          <span className="task-date">Dibuat: {new Date(task.createdAt).toLocaleString('id-ID')}</span>
+        </div>
+
+        <div className="task-actions">
+          <button className="btn btn-info" onClick={() => onViewLogs(task.id)}>
+            Log Aktivitas
+          </button>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="task-item">
       <div className="task-header">

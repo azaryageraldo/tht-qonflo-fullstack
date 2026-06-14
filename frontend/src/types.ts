@@ -5,6 +5,7 @@ export interface Task {
   title: string;
   status: TaskStatus;
   createdAt: string;
+  isDeleted: boolean;
 }
 
 export interface AuditLog {
