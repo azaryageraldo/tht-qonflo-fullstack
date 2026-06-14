@@ -15,7 +15,7 @@ export function createTask(req: Request, res: Response): void {
   const { title } = req.body;
 
   if (!title || typeof title !== 'string' || title.trim().length === 0) {
-    res.status(400).json({ error: 'Title is required and must be a non-empty string' });
+    res.status(400).json({ error: 'Judul tugas wajib diisi' });
     return;
   }
 
@@ -36,18 +36,18 @@ export function updateTaskStatus(req: Request, res: Response): void {
   const { status, actor } = req.body;
 
   if (!actor || typeof actor !== 'string' || actor.trim().length === 0) {
-    res.status(400).json({ error: 'Actor is required' });
+    res.status(400).json({ error: 'Actor wajib diisi' });
     return;
   }
 
   const task = store.getTaskById(id);
   if (!task) {
-    res.status(404).json({ error: 'Task not found' });
+    res.status(404).json({ error: 'Tugas tidak ditemukan' });
     return;
   }
 
   if (!status || typeof status !== 'string') {
-    res.status(400).json({ error: 'Status is required' });
+    res.status(400).json({ error: 'Status wajib diisi' });
     return;
   }
 
@@ -61,7 +61,7 @@ export function updateTaskStatus(req: Request, res: Response): void {
   const allowedNext = VALID_TRANSITIONS[task.status];
   if (allowedNext !== status) {
     res.status(400).json({
-      error: `Invalid status transition from "${task.status}" to "${status}". Allowed next status: "${allowedNext ?? 'none'}"`,
+      error: `Transisi status dari "${task.status}" ke "${status}" tidak valid. Status selanjutnya: "${allowedNext ?? 'tidak ada'}"`,
     });
     return;
   }
@@ -89,7 +89,7 @@ export function deleteTask(req: Request, res: Response): void {
 
   const task = store.getTaskById(id);
   if (!task) {
-    res.status(404).json({ error: 'Task not found' });
+    res.status(404).json({ error: 'Tugas tidak ditemukan' });
     return;
   }
 
@@ -103,7 +103,7 @@ export function getAuditLogs(req: Request, res: Response): void {
 
   const task = store.getTaskById(id);
   if (!task) {
-    res.status(404).json({ error: 'Task not found' });
+    res.status(404).json({ error: 'Tugas tidak ditemukan' });
     return;
   }
 

@@ -20,7 +20,7 @@ function App() {
       const data = await fetchTasks();
       setTasks(data);
     } catch {
-      setError('Failed to load tasks');
+      setError('Gagal memuat tugas');
     } finally {
       setLoading(false);
     }
@@ -36,7 +36,7 @@ function App() {
       await createTask(title);
       await loadTasks();
     } catch (err: unknown) {
-      setError(err instanceof Error ? err.message : 'Failed to create task');
+      setError(err instanceof Error ? err.message : 'Gagal membuat tugas');
     }
   };
 
@@ -46,7 +46,7 @@ function App() {
       await updateTaskStatus(taskId, newStatus, actor);
       await loadTasks();
     } catch (err: unknown) {
-      setError(err instanceof Error ? err.message : 'Failed to update status');
+      setError(err instanceof Error ? err.message : 'Gagal mengubah status');
     }
   };
 
@@ -56,7 +56,7 @@ function App() {
       await deleteTask(taskId);
       await loadTasks();
     } catch {
-      setError('Failed to delete task');
+      setError('Gagal menghapus tugas');
     }
   };
 
@@ -67,7 +67,7 @@ function App() {
       <header className="app-header">
         <h1>Mini Task Manager</h1>
         <div className="actor-selector">
-          <label htmlFor="actor">Acting as:</label>
+          <label htmlFor="actor">Bertindak sebagai:</label>
           <select
             id="actor"
             value={selectedActor}
@@ -92,9 +92,9 @@ function App() {
       <TaskForm onCreateTask={handleCreateTask} />
 
       {loading ? (
-        <p className="loading">Loading tasks...</p>
+        <p className="loading">Memuat tugas...</p>
       ) : tasks.length === 0 ? (
-        <p className="empty-state">No tasks yet. Create your first task above!</p>
+        <p className="empty-state">Belum ada tugas. Buat tugas pertamamu di atas!</p>
       ) : (
         <div className="task-list">
           {tasks.map((task) => (

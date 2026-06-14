@@ -1,26 +1,58 @@
-:root {
-  --text: #374151;
-  --text-h: #111827;
-  --bg: #f9fafb;
-  --card-bg: #ffffff;
-  --border: #e5e7eb;
-  --primary: #3b82f6;
-  --primary-hover: #2563eb;
-  --danger: #ef4444;
-  --danger-hover: #dc2626;
-  --info: #6366f1;
-  --info-hover: #4f46e5;
-  --success: #10b981;
-  --warning: #f59e0b;
-  --error-bg: #fef2f2;
-  --error-border: #fecaca;
-  --error-text: #991b1b;
-  --shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 
-  font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
-  font-size: 16px;
-  line-height: 1.5;
-  color: var(--text);
+:root {
+  /* Colors */
+  --bg: #f0f2f5;
+  --surface: #ffffff;
+  --surface-hover: #f8f9fa;
+  --text-primary: #1a1d23;
+  --text-secondary: #5f6368;
+  --text-muted: #9aa0a6;
+  --border: #e8eaed;
+  --border-light: #f1f3f4;
+
+  /* Brand */
+  --primary: #4f46e5;
+  --primary-light: #eef2ff;
+  --primary-hover: #4338ca;
+
+  /* Status */
+  --status-todo: #6b7280;
+  --status-todo-bg: #f3f4f6;
+  --status-pending: #d97706;
+  --status-pending-bg: #fffbeb;
+  --status-progress: #2563eb;
+  --status-progress-bg: #eff6ff;
+  --status-done: #059669;
+  --status-done-bg: #ecfdf5;
+
+  /* Semantic */
+  --danger: #dc2626;
+  --danger-hover: #b91c1c;
+  --danger-bg: #fef2f2;
+  --info: #7c3aed;
+  --info-hover: #6d28d9;
+  --info-bg: #f5f3ff;
+
+  /* Shadows */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.07), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.08), 0 4px 6px -4px rgba(0, 0, 0, 0.04);
+  --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.06);
+
+  /* Radius */
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+  --radius-full: 9999px;
+
+  /* Font */
+  --font: 'Inter', system-ui, -apple-system, sans-serif;
+
+  font-family: var(--font);
+  font-size: 15px;
+  line-height: 1.6;
+  color: var(--text-primary);
   background: var(--bg);
 }
 
@@ -32,10 +64,17 @@
 
 body {
   min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 #root {
-  max-width: 800px;
+  max-width: 720px;
   margin: 0 auto;
-  padding: 24px 16px;
+  padding: 40px 20px;
+}
+
+::selection {
+  background: var(--primary-light);
+  color: var(--primary);
 }

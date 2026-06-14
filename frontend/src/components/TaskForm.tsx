@@ -21,11 +21,11 @@ export default function TaskForm({ onCreateTask }: TaskFormProps) {
         type="text"
         value={title}
         onChange={(e) => setTitle(e.target.value)}
-        placeholder="Enter task title..."
+        placeholder="Masukkan judul tugas..."
         className="task-input"
       />
       <button type="submit" className="btn btn-primary" disabled={!title.trim()}>
-        Add Task
+        Tambah Tugas
       </button>
     </form>
   );

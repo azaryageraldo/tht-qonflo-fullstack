@@ -24,17 +24,17 @@ export default function AuditLogModal({ taskId, taskTitle, onClose }: AuditLogMo
     <div className="modal-overlay" onClick={onClose}>
       <div className="modal-content" onClick={(e) => e.stopPropagation()}>
         <div className="modal-header">
-          <h2>Audit Log</h2>
+          <h2>Log Aktivitas</h2>
           <button className="btn-close" onClick={onClose}>
             &times;
           </button>
         </div>
-        <p className="modal-task-title">Task: <strong>{taskTitle}</strong></p>
+        <p className="modal-task-title">Tugas: <strong>{taskTitle}</strong></p>
 
         {loading ? (
-          <p className="loading">Loading...</p>
+          <p className="loading">Memuat...</p>
         ) : logs.length === 0 ? (
-          <p className="empty-logs">No status changes recorded yet.</p>
+          <p className="empty-logs">Belum ada riwayat perubahan status.</p>
         ) : (
           <div className="audit-log-list">
             {logs.map((log) => (
@@ -43,12 +43,12 @@ export default function AuditLogModal({ taskId, taskTitle, onClose }: AuditLogMo
                   <strong>{log.actor}</strong>
                 </div>
                 <div className="log-detail">
-                  Changed status from{' '}
+                  Mengubah status dari{' '}
                   <span className="status-tag">{STATUS_LABELS[log.previousStatus]}</span>
                   {' → '}
                   <span className="status-tag">{STATUS_LABELS[log.newStatus]}</span>
                 </div>
-                <div className="log-time">{new Date(log.changedAt).toLocaleString()}</div>
+                <div className="log-time">{new Date(log.changedAt).toLocaleString('id-ID')}</div>
               </div>
             ))}
           </div>
